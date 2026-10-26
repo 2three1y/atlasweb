@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atlas Web: a private, keyless AI assistant in your browser</title>
+<meta name="description" content="A web version of the Atlas AI Android app. Chat, voice chat and writing tools, with the AI model running fully in your browser. No API keys, no account.">
+<meta name="color-scheme" content="dark">
+<link rel="stylesheet" href="styles.css">
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<a class="skip" href="#chat-heading">Skip to chat</a>
+<header class="site-header">
+  <h1>Atlas Web</h1>
+  <p class="tagline">A private AI assistant that runs on your own device. No account, no API keys.</p>
+  <p class="credit">Based on <a href="https://www.reddit.com/r/AiBuilders/comments/1xd9llc/hello_im_taha_armin_and_i_made_atlas_ai/">Atlas AI by Taha Armin</a>. This is an unofficial web version, made with respect for the original app.</p>
+</header>
+
+<main>
+  <section class="card" aria-labelledby="engine-heading">
+    <h2 id="engine-heading">Start Atlas</h2>
+    <p id="engine-explainer">Atlas Web downloads a small AI model (Qwen 2.5, 0.5B, about 500 MB) once from Hugging Face, the model's own host. After that it runs on this device and your words never leave it. The download is cached, so next time it starts much faster.</p>
+    <button type="button" id="load-button" class="primary" aria-describedby="engine-explainer">Load Atlas</button>
+    <p class="progress-row" id="progress-row" hidden>
+      <label for="load-progress">Download progress</label>
+      <progress id="load-progress" max="100" value="0"></progress>
+      <span id="progress-text">0 percent</span>
+    </p>
+    <p id="status" role="status" class="status">Atlas is not loaded yet.</p>
+  </section>
+
+  <section class="card" aria-labelledby="chat-heading">
+    <h2 id="chat-heading" tabindex="-1">Chat</h2>
+
+    <div class="settings-row">
+      <p class="field">
+        <label for="model-select">AI model</label>
+        <select id="model-select"></select>
+        <span id="model-description" class="hint"></span>
+      </p>
+      <p class="field">
+        <label for="length-select">AI response length</label>
+        <select id="length-select"></select>
+        <span id="length-description" class="hint"></span>
+      </p>
+    </div>
+    <p class="field check">
+      <input type="checkbox" id="speak-replies">
+      <label for="speak-replies">Read replies aloud</label>
+    </p>
+
+    <div id="welcome" class="welcome">
+      <h3>What can Atlas help with today?</h3>
+      <ul class="chips" id="suggestions"></ul>
+    </div>
+
+    <ol id="messages" class="messages"></ol>
+
+    <form id="chat-form" class="composer">
+      <label for="prompt">Ask Atlas AI anything</label>
+      <textarea id="prompt" rows="3" placeholder="Ask Atlas AI anything..."></textarea>
+      <div class="button-row">
+        <button type="submit" id="send-button" class="primary">Send</button>
+        <button type="button" id="stop-button" hidden>Stop generation</button>
+        <button type="button" id="dictate-button">Dictate</button>
+        <button type="button" id="new-chat-button">New chat</button>
+        <button type="button" id="clear-button">Clear conversation</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card" aria-labelledby="voice-heading">
+    <h2 id="voice-heading">Voice chat</h2>
+    <p>Talk hands-free with Atlas. It listens, answers in one short sentence, speaks it, then listens again until you end the call.</p>
+    <p class="field">
+      <label for="voice-language">Voice language</label>
+      <select id="voice-language"></select>
+    </p>
+    <div class="button-row">
+      <button type="button" id="voice-start">Start voice chat</button>
+      <button type="button" id="voice-end" hidden>End call</button>
+    </div>
+    <p id="voice-state" class="hint">Voice chat is off.</p>
+    <p id="voice-support" class="hint" hidden>Your browser has no speech recognition, so voice chat is not available here. Safari and Chrome support it.</p>
+  </section>
+
+  <section class="card" aria-labelledby="tools-heading">
+    <h2 id="tools-heading">Writing tools</h2>
+    <p>The Android app has an Atlas keyboard with AI tools. Here they work on any text you paste in.</p>
+    <p class="field">
+      <label for="tool-input">Your text</label>
+      <textarea id="tool-input" rows="4"></textarea>
+    </p>
+    <ul class="tool-list" id="tool-buttons"></ul>
+    <p class="field">
+      <label for="tool-output">Result</label>
+      <textarea id="tool-output" rows="4" readonly></textarea>
+    </p>
+    <div class="button-row">
+      <button type="button" id="tool-copy">Copy result</button>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="history-heading">
+    <h2 id="history-heading">Conversation history</h2>
+    <p class="field">
+      <label for="history-search">Search chats</label>
+      <input type="search" id="history-search" placeholder="Search chats...">
+    </p>
+    <ul id="history-list" class="history"></ul>
+    <p id="history-empty" class="hint">No saved chats yet.</p>
+  </section>
+
+  <section class="card" aria-labelledby="about-heading">
+    <h2 id="about-heading">About Atlas Web</h2>
+    <p>Atlas AI is a free, space-themed AI assistant for Android made by Taha Armin. It has chat, four AI personalities, response length settings, voice chat, a "Hey Atlas" voice assistant and an AI keyboard.</p>
+    <p>I rebuilt the parts that make sense on the web, so it works with VoiceOver, TalkBack and a keyboard in any modern browser. The original app sends your messages to a cloud AI service. Atlas Web runs a small open model right on your device instead, so it is private and needs no keys. The tradeoff is that answers are simpler and slower than a big cloud model.</p>
+    <p>The four personalities (Atlas, Hyperion, Astraea and Prometheus) and the response lengths come from the original app. All of them use the same on-device model here.</p>
+    <p>Not included: the "Hey Atlas" always-on wake word, the quick settings tile and the system keyboard, because browsers cannot do those.</p>
+    <p>Source code: <a href="https://github.com/2three1y/atlasweb">github.com/2three1y/atlasweb</a>.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>Co-written with Tab</p>
+</footer>
+</body>
+</html>
