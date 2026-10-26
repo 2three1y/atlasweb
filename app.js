@@ -406,7 +406,10 @@ function endVoice() {
 // ---------- writing tools ----------
 // Small models like to add "Sure! Here is..." even when told not to. Keep only the text.
 function cleanToolResult(text) {
-  let t = text.trim().replace(/^(sure|certainly|of course|here)[^\n]*:\s*\n+/i, '').trim();
+  let t = text.trim();
+  // Drop a lead-in paragraph that ends with a colon ("Here is the corrected text:").
+  const lead = t.match(/^[^\n]*:\s*\n+/);
+  if (lead && t.length > lead[0].length) t = t.slice(lead[0].length).trim();
   if (/^["“].*["”]$/s.test(t)) t = t.slice(1, -1).trim();
   return t;
 }
