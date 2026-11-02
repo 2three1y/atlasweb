@@ -459,8 +459,6 @@ function init() {
     $('model-description').textContent = selected(MODELS, $('model-select').value).description;
     $('length-description').textContent = selected(LENGTHS, $('length-select').value).description;
   };
-  $('model-select').setAttribute('aria-describedby', 'model-description');
-  $('length-select').setAttribute('aria-describedby', 'length-description');
   describe();
   $('model-select').addEventListener('change', () => { store.set('model', $('model-select').value); describe(); });
   $('length-select').addEventListener('change', () => { store.set('length', $('length-select').value); describe(); });
